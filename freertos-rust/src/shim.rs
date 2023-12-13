@@ -81,6 +81,61 @@ extern "C" {
         item: FreeRtosVoidPtr,
         xHigherPriorityTaskWoken: FreeRtosBaseTypeMutPtr,
     ) -> FreeRtosUBaseType;
+	
+    // stream and message buffer support requires FreeRTOS v10.0.0
+    pub fn freertos_rs_stream_buffer_create(
+        buffer_size_bytes: FreeRtosSizeT,
+        trigger_level_bytes: FreeRtosSizeT,
+    ) -> FreeRtosStreamBufferHandle;
+    pub fn freertos_rs_stream_buffer_delete(stream: FreeRtosStreamBufferHandle);
+    pub fn freertos_rs_stream_buffer_send(
+        stream: FreeRtosStreamBufferHandle,
+        data: FreeRtosVoidPtr,
+        length_bytes: FreeRtosSizeT,
+        max_wait: FreeRtosTickType,
+    ) -> FreeRtosSizeT;
+    pub fn freertos_rs_stream_buffer_send_isr(
+        stream: FreeRtosStreamBufferHandle,
+        data: FreeRtosVoidPtr,
+        length_bytes: FreeRtosSizeT,
+        xHigherPriorityTaskWoken: FreeRtosBaseTypeMutPtr,
+    ) -> FreeRtosSizeT;
+    pub fn freertos_rs_stream_buffer_receive(
+        stream: FreeRtosStreamBufferHandle,
+        data: FreeRtosMutVoidPtr,
+        length_bytes: FreeRtosSizeT,
+        max_wait: FreeRtosTickType,
+    ) -> FreeRtosSizeT;
+    pub fn freertos_rs_stream_buffer_bytes_waiting(
+        stream: FreeRtosStreamBufferHandle,
+    ) -> FreeRtosSizeT;
+
+    pub fn freertos_rs_message_buffer_create(
+        buffer_size_bytes: FreeRtosSizeT,
+        trigger_level_bytes: FreeRtosSizeT,
+    ) -> FreeRtosStreamBufferHandle;
+    pub fn freertos_rs_message_buffer_delete(stream: FreeRtosStreamBufferHandle);
+    pub fn freertos_rs_message_buffer_send(
+        stream: FreeRtosStreamBufferHandle,
+        data: FreeRtosVoidPtr,
+        length_bytes: FreeRtosSizeT,
+        max_wait: FreeRtosTickType,
+    ) -> FreeRtosSizeT;
+    pub fn freertos_rs_message_buffer_send_isr(
+        stream: FreeRtosStreamBufferHandle,
+        data: FreeRtosVoidPtr,
+        length_bytes: FreeRtosSizeT,
+        xHigherPriorityTaskWoken: FreeRtosBaseTypeMutPtr,
+    ) -> FreeRtosSizeT;
+    pub fn freertos_rs_message_buffer_receive(
+        stream: FreeRtosStreamBufferHandle,
+        data: FreeRtosMutVoidPtr,
+        length_bytes: FreeRtosSizeT,
+        max_wait: FreeRtosTickType,
+    ) -> FreeRtosSizeT;
+    pub fn freertos_rs_message_buffer_is_empty(stream: FreeRtosStreamBufferHandle)
+        -> FreeRtosSizeT;
+
     pub fn freertos_rs_isr_yield();
 
     pub fn freertos_rs_task_notify_take(clear_count: u8, wait: FreeRtosTickType) -> u32;

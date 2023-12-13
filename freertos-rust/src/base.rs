@@ -28,6 +28,8 @@ pub type FreeRtosBaseTypeMutPtr = *mut FreeRtosBaseType;
 
 pub type FreeRtosTaskHandle = *const c_void;
 pub type FreeRtosQueueHandle = *const c_void;
+pub type FreeRtosStreamBufferHandle = *const c_void;
+pub type FreeRtosMessageBufferHandle = *const c_void;
 pub type FreeRtosSemaphoreHandle = *const c_void;
 pub type FreeRtosTaskFunction = *const c_void;
 pub type FreeRtosTimerHandle = *const c_void;

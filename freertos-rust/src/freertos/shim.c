@@ -10,6 +10,12 @@ STM32 example:
 #include "timers.h"
 #include "queue.h"
 #include "semphr.h"
+// stream and message buffers available from FreeRTOS v10.0.0
+// ref: https://www.freertos.org/RTOS-stream-message-buffers.html
+// ref: https://www.freertos.org/RTOS-stream-buffer-API.html
+// ref: https://www.freertos.org/RTOS-message-buffer-API.html
+#include "stream_buffer.h"
+#include "message_buffer.h"
 
 // Just for testing
 void freertos_rs_invoke_configASSERT() {
@@ -74,6 +80,12 @@ uint8_t freertos_rs_sizeof(uint8_t _type) {
 			break;
 		case 25:
 			return sizeof(TimerCallbackFunction_t);
+			break;
+		case 26:
+			return sizeof(StreamBufferHandle_t);
+			break;
+		case 27:
+			return sizeof(MessageBufferHandle_t);
 			break;
 
 		case 30:
@@ -275,6 +287,57 @@ UBaseType_t freertos_rs_queue_receive(QueueHandle_t queue, void* item, TickType_
 
 UBaseType_t freertos_rs_queue_messages_waiting(QueueHandle_t queue) {
 	return uxQueueMessagesWaiting( queue );
+}
+
+StreamBufferHandle_t freertos_rs_stream_buffer_create(size_t buffer_size_bytes, size_t trigger_level_bytes) {
+	return xStreamBufferCreate(buffer_size_bytes, trigger_level_bytes);
+}
+
+void freertos_rs_stream_buffer_delete(StreamBufferHandle_t stream) {
+	vStreamBufferDelete(stream);
+}
+
+size_t freertos_rs_stream_buffer_send(StreamBufferHandle_t stream, void* data, size_t length_bytes, TickType_t max_wait) {
+	return xStreamBufferSend(stream, data, length_bytes, max_wait);
+}
+
+size_t freertos_rs_stream_buffer_send_isr(StreamBufferHandle_t stream, void* data, size_t length_bytes, BaseType_t* xHigherPriorityTaskWoken) {
+	return xStreamBufferSendFromISR(stream, data, length_bytes, xHigherPriorityTaskWoken);
+}
+
+size_t freertos_rs_stream_buffer_receive(StreamBufferHandle_t stream, void* data, size_t length_bytes, TickType_t max_wait) {
+	return xStreamBufferReceive(stream, data, length_bytes, max_wait);
+}
+
+size_t freertos_rs_stream_buffer_bytes_waiting(StreamBufferHandle_t stream) {
+	return xStreamBufferBytesAvailable( stream );
+}
+
+MessageBufferHandle_t freertos_rs_message_buffer_create(size_t buffer_size_bytes) {
+	return xMessageBufferCreate(buffer_size_bytes);
+}
+
+void freertos_rs_message_buffer_delete(MessageBufferHandle_t msgbuf) {
+	vMessageBufferDelete(msgbuf);
+}
+
+size_t freertos_rs_message_buffer_send(MessageBufferHandle_t msgbuf, void* data, size_t length_bytes, TickType_t max_wait) {
+	return xMessageBufferSend(msgbuf, data, length_bytes, max_wait);
+}
+
+size_t freertos_rs_message_buffer_send_isr(MessageBufferHandle_t msgbuf, void* data, size_t length_bytes, BaseType_t* xHigherPriorityTaskWoken) {
+	return xMessageBufferSendFromISR(msgbuf, data, length_bytes, xHigherPriorityTaskWoken);
+}
+
+size_t freertos_rs_message_buffer_receive(MessageBufferHandle_t msgbuf, void* data, size_t length_bytes, TickType_t max_wait) {
+	return xMessageBufferReceive(msgbuf, data, length_bytes, max_wait);
+}
+
+size_t freertos_rs_message_buffer_is_empty(MessageBufferHandle_t msgbuf) {
+	if (xMessageBufferIsEmpty( msgbuf ) == pdTRUE) {
+		return 1;
+	}
+	return 0;
 }
 
 void freertos_rs_isr_yield() {
