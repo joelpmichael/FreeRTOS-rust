@@ -11,12 +11,13 @@ pub struct TypeSizeError {
 
 #[cfg(feature = "cpu_clock")]
 pub fn cpu_clock_hz() -> u32 {
-  unsafe { freertos_rs_get_configCPU_CLOCK_HZ() }
+    unsafe { freertos_rs_get_configCPU_CLOCK_HZ() }
 }
 
 /// Perform checks whether the C FreeRTOS shim and Rust agree on the sizes of used types.
 pub fn shim_sanity_check() -> Result<(), TypeSizeError> {
     let checks = [
+        (3, mem::size_of::<FreeRtosSizeT>()), // size checking function relies on this to match
         (0, mem::size_of::<FreeRtosVoidPtr>()),
         (1, mem::size_of::<FreeRtosCharPtr>()),
         (2, mem::size_of::<FreeRtosChar>()),
@@ -38,7 +39,7 @@ pub fn shim_sanity_check() -> Result<(), TypeSizeError> {
     for check in &checks {
         let c_size = unsafe { freertos_rs_sizeof(check.0) };
 
-        if c_size != check.1 as u8 {
+        if c_size != check.1 as FreeRtosSizeT {
             return Err(TypeSizeError {
                 id: check.0 as usize,
                 c_size: c_size as usize,

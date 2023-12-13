@@ -43,6 +43,9 @@ uint8_t freertos_rs_sizeof(uint8_t _type) {
 		case 2:
 			return sizeof(char);
 			break;
+		case 3:
+			return sizeof(size_t);
+			break;
 
 		case 10:
 			return sizeof(BaseType_t);

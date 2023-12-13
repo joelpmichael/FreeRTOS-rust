@@ -9,7 +9,7 @@ extern "C" {
     pub fn freertos_rs_pvPortMalloc(xWantedSize: FreeRtosUBaseType) -> FreeRtosVoidPtr;
     pub fn freertos_rs_vPortFree(pv: FreeRtosVoidPtr);
 
-    pub fn freertos_rs_sizeof(_type: u8) -> u8;
+    pub fn freertos_rs_sizeof(_type: u8) -> FreeRtosSizeT;
 
     pub fn freertos_rs_vTaskDelayUntil(
         pxPreviousWakeTime: *mut FreeRtosTickType,

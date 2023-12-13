@@ -15,6 +15,7 @@ pub enum FreeRtosError {
     ProcessorHasShutDown,
 }
 
+pub type FreeRtosSizeT = usize;
 pub type FreeRtosVoidPtr = *const c_void;
 pub type FreeRtosMutVoidPtr = *mut c_void;
 pub type FreeRtosCharPtr = *const u8;
