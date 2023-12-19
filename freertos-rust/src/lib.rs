@@ -83,6 +83,8 @@ mod mutex;
 mod queue;
 #[cfg(feature = "sync")]
 mod semaphore;
+#[cfg(feature = "sync")]
+mod stream_buffer;
 #[cfg(any(feature = "time", feature = "sync"))]
 mod task;
 #[cfg(feature = "time")]
@@ -116,6 +118,8 @@ pub use crate::mutex::*;
 pub use crate::queue::*;
 #[cfg(feature = "sync")]
 pub use crate::semaphore::*;
+#[cfg(feature = "sync")]
+pub use crate::stream_buffer::*;
 #[cfg(any(feature = "time", feature = "sync"))]
 pub use crate::task::*;
 #[cfg(feature = "time")]
