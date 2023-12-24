@@ -72,16 +72,14 @@ extern "C" {
         item: FreeRtosMutVoidPtr,
         max_wait: FreeRtosTickType,
     ) -> FreeRtosUBaseType;
-    pub fn freertos_rs_queue_messages_waiting(
-        queue: FreeRtosQueueHandle,
-    ) -> FreeRtosUBaseType;
+    pub fn freertos_rs_queue_messages_waiting(queue: FreeRtosQueueHandle) -> FreeRtosUBaseType;
 
     pub fn freertos_rs_queue_send_isr(
         queue: FreeRtosQueueHandle,
         item: FreeRtosVoidPtr,
         xHigherPriorityTaskWoken: FreeRtosBaseTypeMutPtr,
     ) -> FreeRtosUBaseType;
-	
+
     // stream and message buffer support requires FreeRTOS v10.0.0
     pub fn freertos_rs_stream_buffer_create(
         buffer_size_bytes: FreeRtosSizeT,
@@ -111,30 +109,33 @@ extern "C" {
     ) -> FreeRtosSizeT;
 
     pub fn freertos_rs_message_buffer_create(
-        buffer_size_bytes: FreeRtosSizeT,
-        trigger_level_bytes: FreeRtosSizeT,
-    ) -> FreeRtosStreamBufferHandle;
-    pub fn freertos_rs_message_buffer_delete(stream: FreeRtosStreamBufferHandle);
+        buffer_size_bytes: FreeRtosSizeT, // = (mem::size_of::<T> + 4) * num_messages
+    ) -> FreeRtosMessageBufferHandle;
+    pub fn freertos_rs_message_buffer_delete(stream: FreeRtosMessageBufferHandle);
     pub fn freertos_rs_message_buffer_send(
-        stream: FreeRtosStreamBufferHandle,
+        message_buffer: FreeRtosMessageBufferHandle,
         data: FreeRtosVoidPtr,
-        length_bytes: FreeRtosSizeT,
+        length_bytes: FreeRtosSizeT, // = mem::size_of::<T>
         max_wait: FreeRtosTickType,
     ) -> FreeRtosSizeT;
     pub fn freertos_rs_message_buffer_send_isr(
-        stream: FreeRtosStreamBufferHandle,
+        message_buffer: FreeRtosMessageBufferHandle,
         data: FreeRtosVoidPtr,
-        length_bytes: FreeRtosSizeT,
+        length_bytes: FreeRtosSizeT, // = mem::size_of::<T>
         xHigherPriorityTaskWoken: FreeRtosBaseTypeMutPtr,
     ) -> FreeRtosSizeT;
     pub fn freertos_rs_message_buffer_receive(
-        stream: FreeRtosStreamBufferHandle,
+        message_buffer: FreeRtosMessageBufferHandle,
         data: FreeRtosMutVoidPtr,
-        length_bytes: FreeRtosSizeT,
+        length_bytes: FreeRtosSizeT, // = mem::size_of::<T>
         max_wait: FreeRtosTickType,
     ) -> FreeRtosSizeT;
-    pub fn freertos_rs_message_buffer_is_empty(stream: FreeRtosStreamBufferHandle)
-        -> FreeRtosSizeT;
+    pub fn freertos_rs_message_buffer_bytes_available(
+        message_buffer: FreeRtosMessageBufferHandle, // = number of bytes available - each message consumes mem::size_of::<T> + 4 bytes
+    ) -> FreeRtosSizeT;
+    pub fn freertos_rs_message_buffer_is_empty(
+        message_buffer: FreeRtosMessageBufferHandle,
+    ) -> FreeRtosSizeT;
 
     pub fn freertos_rs_isr_yield();
 

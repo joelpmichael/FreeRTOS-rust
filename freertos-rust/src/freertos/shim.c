@@ -333,6 +333,10 @@ size_t freertos_rs_message_buffer_receive(MessageBufferHandle_t msgbuf, void* da
 	return xMessageBufferReceive(msgbuf, data, length_bytes, max_wait);
 }
 
+size_t freertos_rs_message_buffer_bytes_available(MessageBufferHandle_t msgbuf) {
+	return xMessageBufferSpacesAvailable(msgbuf);
+}
+
 size_t freertos_rs_message_buffer_is_empty(MessageBufferHandle_t msgbuf) {
 	if (xMessageBufferIsEmpty( msgbuf ) == pdTRUE) {
 		return 1;

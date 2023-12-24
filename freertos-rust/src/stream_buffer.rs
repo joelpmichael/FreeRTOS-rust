@@ -112,6 +112,8 @@ impl StreamBuffer {
         bytes: &[u8],
         max_wait: D,
     ) -> Result<usize, FreeRtosError> {
+        // wait until any other tasks have finished sending
+        // the time spent waiting here is subtracted from the requested wait time
         let mut wait_remain = max_wait.to_ticks();
         while self.tx_task.is_some() && wait_remain > 0 {
             CurrentTask::delay(Duration::eps());
@@ -134,7 +136,7 @@ impl StreamBuffer {
                 wait_remain,
             ) {
                 0 => Err(FreeRtosError::QueueFull),
-                sent => Ok(sent),
+                sent => Ok(sent as usize),
             }
         };
         self.tx_task = None;
