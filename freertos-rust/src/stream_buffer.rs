@@ -20,7 +20,7 @@ unsafe impl Sync for StreamBuffer {}
 /// !!! WARNING !!!
 /// Stream buffers assume that only a single task or ISR is writing, and a single task
 /// is reading, the stream at a time.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct StreamBuffer {
     stream_buffer: FreeRtosStreamBufferHandle,
     max_size: usize,

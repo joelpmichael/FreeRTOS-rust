@@ -19,7 +19,7 @@ unsafe impl<T: Sized + Copy> Sync for MessageBuffer<T> {}
 /// !!! WARNING !!!
 /// Message buffers assume that only a single task or ISR is writing, and a single task
 /// is reading, the buffer at a time.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MessageBuffer<T: Sized + Copy> {
     message_buffer: FreeRtosMessageBufferHandle,
     item_type: PhantomData<T>,
